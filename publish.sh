@@ -21,10 +21,31 @@ if [ -n "$(git status --porcelain)" ]; then
   exit 1
 fi
 
-# 3. Increment minor version, update package.json, commit, and create git tag
-echo "Incrementing minor version..."
-# npm version minor will update version (e.g. 0.0.1 -> 0.1.0), commit it, and create a git tag (v0.1.0)
-NEW_VERSION=$(npm version minor)
+# 3. Determine version bump type (from argument or prompt)
+BUMP_TYPE=$1
+
+if [ -z "$BUMP_TYPE" ]; then
+  echo "Select version bump type:"
+  echo "1) patch (e.g. bump last digit)"
+  echo "2) minor (e.g. bump middle digit)"
+  echo "3) major (e.g. bump first digit)"
+  read -p "Enter choice [1-3] (default: patch): " choice
+
+  case "$choice" in
+    2) BUMP_TYPE="minor" ;;
+    3) BUMP_TYPE="major" ;;
+    *) BUMP_TYPE="patch" ;;
+  esac
+fi
+
+# Validate bump type
+if [ "$BUMP_TYPE" != "patch" ] && [ "$BUMP_TYPE" != "minor" ] && [ "$BUMP_TYPE" != "major" ]; then
+  echo "❌ Invalid bump type '$BUMP_TYPE'. Must be 'patch', 'minor', or 'major'."
+  exit 1
+fi
+
+echo "Incrementing $BUMP_TYPE version..."
+NEW_VERSION=$(npm version "$BUMP_TYPE")
 echo "New version: $NEW_VERSION"
 
 # 4. Push git commit and tags to remote origin
