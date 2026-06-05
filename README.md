@@ -22,7 +22,14 @@ Cocos Creator's editor registers serializable component classes and inspector fi
 
 ### 1. Create Local Wrappers
 
-Create a directory in your project under `assets/scripts/SkillprintSDK/` and add the following wrapper scripts. They inherit from the npm package components, allowing them to register in the Cocos Creator Asset database and inspector.
+You can create these wrapper files manually, or **download them directly from the GitHub repository** to drag them into your project (including their `.meta` files, which preserves their UUIDs for automated scene mapping):
+
+*   📂 **[`templates/` directory on GitHub](https://github.com/skillprint/skillprint-cocos-sdk/tree/main/templates)**
+    *   📄 **[SkillprintConfigComponent.ts](https://raw.githubusercontent.com/skillprint/skillprint-cocos-sdk/main/templates/SkillprintConfigComponent.ts)** | [`.meta` file](https://raw.githubusercontent.com/skillprint/skillprint-cocos-sdk/main/templates/SkillprintConfigComponent.ts.meta)
+    *   📄 **[SkillprintManager.ts](https://raw.githubusercontent.com/skillprint/skillprint-cocos-sdk/main/templates/SkillprintManager.ts)** | [`.meta` file](https://raw.githubusercontent.com/skillprint/skillprint-cocos-sdk/main/templates/SkillprintManager.ts.meta)
+    *   📄 **[SkillprintTestController.ts](https://raw.githubusercontent.com/skillprint/skillprint-cocos-sdk/main/templates/SkillprintTestController.ts)** | [`.meta` file](https://raw.githubusercontent.com/skillprint/skillprint-cocos-sdk/main/templates/SkillprintTestController.ts.meta)
+
+If creating files manually, save them under `assets/scripts/SkillprintSDK/` with the following contents:
 
 #### 📄 `assets/scripts/SkillprintSDK/SkillprintConfigComponent.ts`
 ```typescript
