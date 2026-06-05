@@ -1,4 +1,4 @@
-import { ParameterInfo, ParameterUpdateResult } from './SkillprintTypes';
+import { ParameterInfo, ParameterUpdateResult } from './SkillprintTypes.js';
 export declare class SkillprintAPIClient {
     private baseUrl;
     private partnerApiKey;

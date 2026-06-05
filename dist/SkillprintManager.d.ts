@@ -1,5 +1,5 @@
 import { Component } from 'cc';
-import { SkillprintConfig } from './SkillprintTypes';
+import { SkillprintConfig } from './SkillprintTypes.js';
 export declare class SkillprintManager extends Component {
     private static _instance;
     static get instance(): SkillprintManager;

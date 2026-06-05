@@ -1,7 +1,7 @@
 import { _decorator, Component, director, Camera, sys, Enum } from 'cc';
-import { SkillprintConfig, ParameterDefinition, ParameterType, ParameterInfo, ParameterUpdateResult, Mood, ApiEnvironment } from './SkillprintTypes';
-import { SkillprintAPIClient } from './SkillprintAPIClient';
-import { ScreenshotUtility } from './ScreenshotUtility';
+import { SkillprintConfig, ParameterDefinition, ParameterType, ParameterInfo, ParameterUpdateResult, Mood, ApiEnvironment } from './SkillprintTypes.js';
+import { SkillprintAPIClient } from './SkillprintAPIClient.js';
+import { ScreenshotUtility } from './ScreenshotUtility.js';
 
 const { ccclass, property } = _decorator;
 

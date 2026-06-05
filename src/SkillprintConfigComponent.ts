@@ -1,5 +1,5 @@
 import { _decorator, Component, Enum } from 'cc';
-import { ApiEnvironment, SkillprintConfig } from './SkillprintTypes';
+import { ApiEnvironment, SkillprintConfig } from './SkillprintTypes.js';
 
 const { ccclass, property } = _decorator;
 

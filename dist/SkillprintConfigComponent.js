@@ -5,7 +5,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 import { _decorator, Component, Enum } from 'cc';
-import { ApiEnvironment } from './SkillprintTypes';
+import { ApiEnvironment } from './SkillprintTypes.js';
 const { ccclass, property } = _decorator;
 Enum(ApiEnvironment);
 let SkillprintConfigComponent = class SkillprintConfigComponent extends Component {

@@ -1,5 +1,5 @@
 import { Component } from 'cc';
-import { ApiEnvironment, SkillprintConfig } from './SkillprintTypes';
+import { ApiEnvironment, SkillprintConfig } from './SkillprintTypes.js';
 export declare class SkillprintConfigComponent extends Component {
     gameName: string;
     targetEnvironment: ApiEnvironment;

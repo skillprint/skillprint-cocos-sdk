@@ -6,9 +6,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var SkillprintManager_1;
 import { _decorator, Component, director, Camera, sys, Enum } from 'cc';
-import { ParameterType, ApiEnvironment } from './SkillprintTypes';
-import { SkillprintAPIClient } from './SkillprintAPIClient';
-import { ScreenshotUtility } from './ScreenshotUtility';
+import { ParameterType, ApiEnvironment } from './SkillprintTypes.js';
+import { SkillprintAPIClient } from './SkillprintAPIClient.js';
+import { ScreenshotUtility } from './ScreenshotUtility.js';
 const { ccclass, property } = _decorator;
 Enum(ApiEnvironment);
 let SkillprintManager = SkillprintManager_1 = class SkillprintManager extends Component {

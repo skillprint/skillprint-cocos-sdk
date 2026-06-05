@@ -1,4 +1,4 @@
-import { ParameterInfo, ParameterUpdateResult, PollResultsResponse } from './SkillprintTypes';
+import { ParameterInfo, ParameterUpdateResult, PollResultsResponse } from './SkillprintTypes.js';
 
 export class SkillprintAPIClient {
     private baseUrl: string;
