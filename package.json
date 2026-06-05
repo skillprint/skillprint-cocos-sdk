@@ -1,6 +1,6 @@
 {
   "name": "@skillprint/cocos-sdk",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
   "description": "Skillprint SDK for Cocos Creator 3.x",
   "main": "dist/index.js",
