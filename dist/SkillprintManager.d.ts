@@ -1,0 +1,35 @@
+import { Component } from 'cc';
+import { SkillprintConfig } from './SkillprintTypes';
+export declare class SkillprintManager extends Component {
+    private static _instance;
+    static get instance(): SkillprintManager;
+    private config;
+    private currentSessionId;
+    private isSessionActive;
+    private apiClient;
+    private screenshotUtility;
+    private screenshotQueue;
+    private registeredParameters;
+    private captureCallback;
+    private postCallback;
+    private pollCallback;
+    onLoad(): void;
+    init(config: SkillprintConfig): void;
+    registerParameterModifier<T>(parameterName: string, updateAction: (value: T) => void, description?: string, howItWorks?: string): void;
+    startGameSession(targetMood: string, customPlayerId?: string | null): Promise<void>;
+    stopGameSession(): Promise<void>;
+    private startLoops;
+    private stopLoops;
+    private applyParameterUpdates;
+    private convertValue;
+    private isValidValue;
+    private findActiveCamera;
+    startGameSessionFromUrl(fallbackMood?: string, fallbackPlayerId?: string | null): void;
+    startGameSessionWithOverrides(fallbackMood?: string, fallbackPlayerId?: string | null, overrideMood?: string | null, overridePlayerId?: string | null): void;
+    getUrlParametersInfo(): string;
+    private getSkillprintUrlParameters;
+    private generateUUID;
+    log(msg: string, level?: 'Info' | 'Warning' | 'Error'): void;
+    getConfig(): SkillprintConfig | null;
+    onDestroy(): void;
+}
