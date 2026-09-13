@@ -21,6 +21,24 @@ export enum Mood {
     awe = 'awe',
 }
 
+/**
+ * Fixed discrete-telemetry event vocabulary, matching skillprint-js-sdk's
+ * GameEvent enum (src/constants.ts) so events logged with it are read the
+ * same way by the backend's adaptation scoring regardless of platform.
+ * logEvent also accepts a plain string for a game-specific custom event
+ * name outside this fixed set -- see SkillprintManager.logEvent.
+ */
+export enum GameEvent {
+    LEVEL_START = 'LEVEL_START',
+    LEVEL_COMPLETE = 'LEVEL_COMPLETE',
+    LEVEL_QUIT = 'LEVEL_QUIT',
+    LEVEL_FAILED = 'LEVEL_FAILED',
+    LEVEL_RESTART = 'LEVEL_RESTART',
+    HINT = 'HINT',
+    GENERIC_POSITIVE = 'GENERIC_POSITIVE',
+    GENERIC_NEGATIVE = 'GENERIC_NEGATIVE',
+}
+
 export interface ParameterDefinition {
     parameterName: string;
     description?: string;

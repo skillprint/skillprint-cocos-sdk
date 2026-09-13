@@ -21,3 +21,21 @@ export var Mood;
     Mood["empathy"] = "empathy";
     Mood["awe"] = "awe";
 })(Mood || (Mood = {}));
+/**
+ * Fixed discrete-telemetry event vocabulary, matching skillprint-js-sdk's
+ * GameEvent enum (src/constants.ts) so events logged with it are read the
+ * same way by the backend's adaptation scoring regardless of platform.
+ * logEvent also accepts a plain string for a game-specific custom event
+ * name outside this fixed set -- see SkillprintManager.logEvent.
+ */
+export var GameEvent;
+(function (GameEvent) {
+    GameEvent["LEVEL_START"] = "LEVEL_START";
+    GameEvent["LEVEL_COMPLETE"] = "LEVEL_COMPLETE";
+    GameEvent["LEVEL_QUIT"] = "LEVEL_QUIT";
+    GameEvent["LEVEL_FAILED"] = "LEVEL_FAILED";
+    GameEvent["LEVEL_RESTART"] = "LEVEL_RESTART";
+    GameEvent["HINT"] = "HINT";
+    GameEvent["GENERIC_POSITIVE"] = "GENERIC_POSITIVE";
+    GameEvent["GENERIC_NEGATIVE"] = "GENERIC_NEGATIVE";
+})(GameEvent || (GameEvent = {}));

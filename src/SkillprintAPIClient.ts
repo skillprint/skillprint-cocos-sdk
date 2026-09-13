@@ -10,6 +10,7 @@ export class SkillprintAPIClient {
     private static readonly START_SESSION_ENDPOINT = '/games/api/sessions/';
     private static readonly UPLOAD_SCREENSHOTS_ENDPOINT = '/games/api/record-session/{sessionId}/';
     private static readonly POLL_RESULTS_ENDPOINT = '/games/api/sessions/{sessionId}/';
+    private static readonly ADD_TELEMETRY_ENDPOINT = '/games/api/sessions/telemetry';
     private static readonly CREATE_USER_ENDPOINT = '/partners/api/users/add/';
     private static readonly GET_USER_TOKEN_ENDPOINT = '/partners/api/users/auth/token/';
 
@@ -232,6 +233,49 @@ export class SkillprintAPIClient {
         } catch (err: any) {
             this.log(`PollResults Error: ${err.message || err}`, 'Error');
             return [];
+        }
+    }
+
+    /**
+     * Appends a discrete telemetry event to an active session. Mirrors
+     * skillprint-js-sdk's logTelemetryEvent exactly: sessionId/gameSlug go
+     * in the query string (not the body), and `event` is wrapped in an
+     * outer {"event": ...} envelope -- confirmed against marketplace's
+     * games/tests/test_sessions.py, which posts
+     * {"event": {"a": 1, "timestamp": ...}} and asserts session.telemetry
+     * becomes [{"a": 1, "timestamp": ...}]. Sending `event` unwrapped would
+     * store the bare event name string as the whole telemetry entry.
+     */
+    public async logTelemetryEvent(
+        sessionId: string,
+        gameSlug: string,
+        event: Record<string, any>
+    ): Promise<boolean> {
+        const url = `${this.baseUrl}${SkillprintAPIClient.ADD_TELEMETRY_ENDPOINT}` +
+            `?session_id=${encodeURIComponent(sessionId)}&game_slug=${encodeURIComponent(gameSlug)}`;
+        this.log(`Logging telemetry event '${event.event}': POST ${url}`, 'Info');
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Api-Key ${this.partnerApiKey}`
+                },
+                body: JSON.stringify({ event })
+            });
+
+            const text = await response.text();
+            if (response.ok) {
+                this.log(`LogTelemetryEvent successful. Response: ${text}`, 'Info');
+                return true;
+            } else {
+                this.log(`LogTelemetryEvent Error: ${response.statusText}. Response: ${text}`, 'Warning');
+                return false;
+            }
+        } catch (err: any) {
+            this.log(`LogTelemetryEvent Network Error: ${err.message || err}`, 'Warning');
+            return false;
         }
     }
 
