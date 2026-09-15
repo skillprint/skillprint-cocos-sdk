@@ -109,6 +109,37 @@ export class SkillprintTestController extends Component {
 }
 ```
 
+### Log Discrete Telemetry Events
+
+Screenshot capture is the SDK's primary telemetry mechanism and covers every game automatically. `logEvent` is an **optional, additive** layer on top of it for games that want precise, low-latency event signals alongside the vision-based scoring — it doesn't replace or interact with the screenshot loop.
+
+```typescript
+import { GameEvent } from '@skillprint/cocos-sdk';
+
+SkillprintManager.instance.logEvent(GameEvent.LEVEL_START);
+SkillprintManager.instance.logEvent(GameEvent.LEVEL_COMPLETE, { level: 3, score: 1200 });
+```
+
+`logEvent` is fire-and-forget: a failed request is logged and never throws, so it can never interrupt gameplay. Calling it with no active session is a no-op (also just a logged warning).
+
+**Two ways to use it**, matching skillprint-js-sdk exactly so events are read the same way regardless of platform:
+
+1. **The fixed `GameEvent` vocabulary** — recommended for most integrations. Events logged with one of these names are automatically read as a clear positive or negative signal, with nothing else to configure:
+
+   | Event | Signal |
+   |---|---|
+   | `LEVEL_START`, `LEVEL_COMPLETE` | Positive |
+   | `LEVEL_QUIT`, `LEVEL_FAILED`, `LEVEL_RESTART`, `HINT` | Negative |
+   | `GENERIC_POSITIVE`, `GENERIC_NEGATIVE` | Use for anything else that's clearly good or bad for the player and doesn't fit the events above |
+
+2. **A custom event name** (any string) — for a richer, game-specific vocabulary:
+
+```typescript
+SkillprintManager.instance.logEvent('CLOCKWISE_TAP', { comboCount: 4 });
+```
+
+Custom event names don't need to be registered in advance — send whatever your game already tracks. They're picked up by Skillprint's scoring as additional context alongside screenshots. If you want a custom event to map to a specific improvement in scoring accuracy for your game, talk to your Skillprint contact about setting up a custom scoring configuration.
+
 ### Reference in UI scripts (like `HomeUI.ts`)
 To reference your configuration from other scripts:
 ```typescript

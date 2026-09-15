@@ -1,5 +1,5 @@
 import { _decorator, Component, director, Camera, sys, Enum } from 'cc';
-import { SkillprintConfig, ParameterDefinition, ParameterType, ParameterInfo, ParameterUpdateResult, Mood, ApiEnvironment } from './SkillprintTypes.js';
+import { SkillprintConfig, ParameterDefinition, ParameterType, ParameterInfo, ParameterUpdateResult, Mood, ApiEnvironment, GameEvent } from './SkillprintTypes.js';
 import { SkillprintAPIClient } from './SkillprintAPIClient.js';
 import { ScreenshotUtility } from './ScreenshotUtility.js';
 
@@ -198,6 +198,39 @@ export class SkillprintManager extends Component {
 
         this.currentSessionId = null;
         this.log('Skillprint session stopped.');
+    }
+
+    /**
+     * Logs a discrete telemetry event alongside the screenshot loop --
+     * optional and additive, doesn't replace or interact with it. Mirrors
+     * skillprint-js-sdk's manager.logEvent: fire-and-forget (a failed
+     * request is logged and never throws, so it can't interrupt gameplay),
+     * and a no-op with a warning if called with no active session.
+     *
+     * @param event Either one of the fixed GameEvent values (recommended --
+     *   this exact set is what the backend's adaptation scoring already
+     *   reads as a positive/negative signal) or a custom, game-specific
+     *   event name string -- there's no enum to register a custom name
+     *   against, matching the JS SDK.
+     * @param data Optional extra fields alongside the event name.
+     */
+    public async logEvent(event: GameEvent | string, data: Record<string, any> = {}) {
+        if (!this.isSessionActive || !this.currentSessionId || !this.apiClient || !this.config) {
+            this.log('logEvent called with no active session. Ignoring.', 'Warning');
+            return;
+        }
+
+        try {
+            // Spreading `data` after `event` means a data field literally
+            // named "event" would silently override it -- matches
+            // skillprint-js-sdk's TelemetryEventRequest constructor
+            // (Object.assign(this, data) runs after this.event = event),
+            // kept here for platform parity.
+            const eventPayload = { event, ...data };
+            await this.apiClient.logTelemetryEvent(this.currentSessionId, this.config.gameName, eventPayload);
+        } catch (err: any) {
+            this.log(`Failed to log event '${event}': ${err.message || err}`, 'Warning');
+        }
     }
 
     private startLoops() {

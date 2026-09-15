@@ -10,9 +10,16 @@
   },
   "scripts": {
     "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
     "release": "./publish.sh"
   },
   "peerDependencies": {
     "cc": "*"
+  },
+  "devDependencies": {
+    "typescript": "^5.9.3",
+    "vitest": "^1.3.1"
   }
 }

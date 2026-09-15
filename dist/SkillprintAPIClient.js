@@ -191,6 +191,44 @@ export class SkillprintAPIClient {
             return [];
         }
     }
+    /**
+     * Appends a discrete telemetry event to an active session. Mirrors
+     * skillprint-js-sdk's logTelemetryEvent exactly: sessionId/gameSlug go
+     * in the query string (not the body), and `event` is wrapped in an
+     * outer {"event": ...} envelope -- confirmed against marketplace's
+     * games/tests/test_sessions.py, which posts
+     * {"event": {"a": 1, "timestamp": ...}} and asserts session.telemetry
+     * becomes [{"a": 1, "timestamp": ...}]. Sending `event` unwrapped would
+     * store the bare event name string as the whole telemetry entry.
+     */
+    async logTelemetryEvent(sessionId, gameSlug, event) {
+        const url = `${this.baseUrl}${SkillprintAPIClient.ADD_TELEMETRY_ENDPOINT}` +
+            `?session_id=${encodeURIComponent(sessionId)}&game_slug=${encodeURIComponent(gameSlug)}`;
+        this.log(`Logging telemetry event '${event.event}': POST ${url}`, 'Info');
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Api-Key ${this.partnerApiKey}`
+                },
+                body: JSON.stringify({ event })
+            });
+            const text = await response.text();
+            if (response.ok) {
+                this.log(`LogTelemetryEvent successful. Response: ${text}`, 'Info');
+                return true;
+            }
+            else {
+                this.log(`LogTelemetryEvent Error: ${response.statusText}. Response: ${text}`, 'Warning');
+                return false;
+            }
+        }
+        catch (err) {
+            this.log(`LogTelemetryEvent Network Error: ${err.message || err}`, 'Warning');
+            return false;
+        }
+    }
     getParsedValue(update) {
         // Retrieve the newValue or find the key with the parameterName (for legacy or alternative responses)
         if (update.newValue !== undefined && update.newValue !== null) {
@@ -277,6 +315,7 @@ export class SkillprintAPIClient {
 SkillprintAPIClient.START_SESSION_ENDPOINT = '/games/api/sessions/';
 SkillprintAPIClient.UPLOAD_SCREENSHOTS_ENDPOINT = '/games/api/record-session/{sessionId}/';
 SkillprintAPIClient.POLL_RESULTS_ENDPOINT = '/games/api/sessions/{sessionId}/';
+SkillprintAPIClient.ADD_TELEMETRY_ENDPOINT = '/games/api/sessions/telemetry';
 SkillprintAPIClient.CREATE_USER_ENDPOINT = '/partners/api/users/add/';
 SkillprintAPIClient.GET_USER_TOKEN_ENDPOINT = '/partners/api/users/auth/token/';
 // Retry settings
